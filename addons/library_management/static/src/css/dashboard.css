@@ -1,0 +1,128 @@
+.o_library_dashboard_page {
+    padding: 24px;
+    background: #f7f9fb;
+    min-height: 100%;
+}
+
+.o_library_dashboard_header h1 {
+    margin: 0 0 16px;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.o_library_summary_block {
+    padding: 16px 16px 18px;
+    border-bottom: 1px solid #d8dee6;
+    background: #f7f9fb;
+}
+
+.o_library_dashboard_page .o_library_summary_block {
+    margin-bottom: 16px;
+    border: 1px solid #d8dee6;
+    border-radius: 6px;
+    background: #ffffff;
+}
+
+.o_library_summary_block h2 {
+    margin: 0 0 12px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.o_library_dashboard_kpi {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin: 0;
+}
+
+.o_library_dashboard_page .o_library_dashboard_kpi {
+    margin: 0;
+}
+
+.o_library_kpi_card {
+    min-height: 84px;
+    padding: 14px 16px;
+    border: 1px solid #d8dee6;
+    border-left: 4px solid #2f6f73;
+    border-radius: 6px;
+    background: #ffffff;
+    box-shadow: 0 1px 2px rgba(20, 32, 45, 0.06);
+}
+
+.o_library_kpi_card span {
+    display: block;
+    color: #5c6670;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.o_library_kpi_card strong {
+    display: block;
+    margin-top: 8px;
+    color: #1f2933;
+    font-size: 28px;
+    line-height: 1;
+}
+
+.o_library_book_card,
+.o_library_borrow_card {
+    padding: 8px;
+}
+
+.o_library_dashboard_charts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 16px;
+}
+
+.o_library_chart_panel {
+    padding: 16px;
+    border: 1px solid #d8dee6;
+    border-radius: 6px;
+    background: #ffffff;
+    box-shadow: 0 1px 2px rgba(20, 32, 45, 0.06);
+}
+
+.o_library_chart_panel h2 {
+    margin: 0 0 14px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.o_library_bar_chart {
+    display: grid;
+    gap: 10px;
+}
+
+.o_library_bar_item {
+    display: grid;
+    grid-template-columns: 62px minmax(120px, 1fr) 32px;
+    align-items: center;
+    gap: 10px;
+}
+
+.o_library_bar_label {
+    color: #5c6670;
+    font-size: 12px;
+}
+
+.o_library_bar_track {
+    height: 10px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #e6ebf0;
+}
+
+.o_library_bar_fill {
+    display: block;
+    height: 100%;
+    min-width: 4px;
+    border-radius: inherit;
+    background: #2f6f73;
+}
+
+.o_library_bar_item strong {
+    text-align: right;
+}

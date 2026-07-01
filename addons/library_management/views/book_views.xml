@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_library_book_tree" model="ir.ui.view">
+        <field name="name">library.book.tree</field>
+        <field name="model">library.book</field>
+        <field name="arch" type="xml">
+            <tree js_class="library_book_list" decoration-success="state == 'available'" decoration-warning="state == 'borrowed'" decoration-danger="state in ('lost', 'damaged')">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="author_id"/>
+                <field name="category_id"/>
+                <field name="publisher"/>
+                <field name="shelf_location"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_library_book_form" model="ir.ui.view">
+        <field name="name">library.book.form</field>
+        <field name="model">library.book</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <field name="active" invisible="1"/>
+                    <group>
+                        <group string="Book Information">
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="isbn"/>
+                            <field name="cover_image" widget="image" class="oe_avatar"/>
+                        </group>
+                        <group string="Classification">
+                            <field name="author_id"/>
+                            <field name="category_id"/>
+                            <field name="publisher"/>
+                            <field name="publish_year"/>
+                            <field name="language"/>
+                            <field name="edition"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Location">
+                            <field name="shelf_location"/>
+                        </group>
+                        <group string="Status">
+                            <field name="state"/>
+                            <field name="price"/>
+                            <field name="borrow_count"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description"/>
+                        </page>
+                        <page string="Borrow History">
+                            <field name="borrow_line_ids" readonly="1">
+                                <tree>
+                                    <field name="borrow_id"/>
+                                    <field name="book_id"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_library_book_kanban" model="ir.ui.view">
+        <field name="name">library.book.kanban</field>
+        <field name="model">library.book</field>
+        <field name="arch" type="xml">
+            <kanban js_class="library_book_kanban" default_group_by="state" class="o_kanban_small_column">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="author_id"/>
+                <field name="category_id"/>
+                <field name="shelf_location"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_library_book_card">
+                            <div class="o_kanban_record_title">
+                                <strong><field name="name"/></strong>
+                            </div>
+                            <div class="text-muted"><field name="code"/></div>
+                            <div t-if="record.author_id.raw_value">Author: <field name="author_id"/></div>
+                            <div t-if="record.category_id.raw_value">Category: <field name="category_id"/></div>
+                            <div t-if="record.shelf_location.raw_value">Shelf: <field name="shelf_location"/></div>
+                            <div class="mt8">
+                                <field name="state" widget="badge"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_library_books" model="ir.actions.act_window">
+        <field name="name">Books</field>
+        <field name="res_model">library.book</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create the first physical book copy.</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_library_root" name="Library" sequence="20"/>
+    <menuitem id="menu_library_books" name="Books" parent="menu_library_root" action="action_library_books" sequence="20"/>
+</odoo>

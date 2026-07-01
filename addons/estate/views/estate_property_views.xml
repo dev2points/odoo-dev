@@ -1,0 +1,76 @@
+
+<odoo>
+<!-- Views -->
+<!-- Tree View -->
+<record id="view_estate_property_tree"
+        model="ir.ui.view">
+
+    <field name="name">estate.property.tree</field>
+
+    <field name="model">estate.property</field>
+
+    <field name="arch" type="xml">
+        <tree>
+            <field name="name"/>
+            <field name="expected_price"/>
+            <field name="selling_price"/>
+            <field name="bedrooms"/>
+            <field name="state"/>
+        </tree>
+    </field>
+</record>
+<!-- Form View -->
+<record id="view_estate_property_form"
+        model="ir.ui.view">
+
+    <field name="name">estate.property.form</field>
+
+    <field name="model">estate.property</field>
+
+    <field name="arch" type="xml">
+
+        <form>
+
+            <sheet>
+
+                <group>
+                    <group>
+                    <field name="name"/>
+                    <field name="description"/>
+                    <field name="expected_price"/>
+                    <field name="selling_price"/>
+                    <field name="bedrooms"/>
+                    </group>
+                    <group>
+                    <field name="living_area"/>
+                    <field name="facades"/>
+                    <field name="garage"/>
+                    <field name="garden"/>
+                    <field name="garden_area"/>
+                    <field name="state"/>
+                    <field name="total_area" readonly="1"/>
+                    </group>
+                </group>
+
+            </sheet>
+
+        </form>
+
+    </field>
+
+</record>
+
+<!--Action-->
+<record id="action_estate_property" model="ir.actions.act_window">
+    <field name="name">Properties</field>
+    <field name="res_model">estate.property</field>
+    <field name="view_mode">tree,form</field>
+</record>
+
+<!--Menuitem-->
+<menuitem id="estate_menu_root" name="Estate"/>
+<menuitem id="estate_menu_properties" name="Properties" parent="estate_menu_root" action="action_estate_property"/>
+
+
+
+</odoo>

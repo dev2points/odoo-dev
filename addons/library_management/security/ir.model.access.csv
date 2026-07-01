@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_library_author_user,library.author.user,model_library_author,library_management.group_library_user,1,1,1,0
+access_library_category_user,library.category.user,model_library_category,library_management.group_library_user,1,1,1,0
+access_library_book_user,library.book.user,model_library_book,library_management.group_library_user,1,1,1,0
+access_library_member_user,library.member.user,model_library_member,library_management.group_library_user,1,1,1,0
+access_library_borrow_user,library.borrow.user,model_library_borrow,library_management.group_library_user,1,1,1,0
+access_library_borrow_line_user,library.borrow.line.user,model_library_borrow_line,library_management.group_library_user,1,1,1,0
+access_library_author_manager,library.author.manager,model_library_author,library_management.group_library_manager,1,1,1,1
+access_library_category_manager,library.category.manager,model_library_category,library_management.group_library_manager,1,1,1,1
+access_library_book_manager,library.book.manager,model_library_book,library_management.group_library_manager,1,1,1,1
+access_library_member_manager,library.member.manager,model_library_member,library_management.group_library_manager,1,1,1,1
+access_library_borrow_manager,library.borrow.manager,model_library_borrow,library_management.group_library_manager,1,1,1,1
+access_library_borrow_line_manager,library.borrow.line.manager,model_library_borrow_line,library_management.group_library_manager,1,1,1,1

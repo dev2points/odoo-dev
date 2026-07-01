@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="library_management.Dashboard" owl="1">
+        <div class="o_library_dashboard_page">
+            <div class="o_library_dashboard_header">
+                <h1>Library Dashboard</h1>
+            </div>
+            <BookSummary/>
+            <MemberSummary/>
+            <BorrowSummary/>
+
+            <section class="o_library_dashboard_charts" aria-label="Borrow statistics">
+                <article class="o_library_chart_panel">
+                    <h2>Borrow Count by Week</h2>
+                    <t t-call="library_management.BarChart">
+                        <t t-set="items" t-value="state.borrows.weekly_data || []"/>
+                    </t>
+                </article>
+                <article class="o_library_chart_panel">
+                    <h2>Borrow Count by Month</h2>
+                    <t t-call="library_management.BarChart">
+                        <t t-set="items" t-value="state.borrows.monthly_data || []"/>
+                    </t>
+                </article>
+            </section>
+        </div>
+    </t>
+
+    <t t-name="library_management.BookSummary" owl="1">
+        <section class="o_library_summary_block" aria-label="Book summary">
+            <h2>Books</h2>
+            <div class="o_library_dashboard_kpi">
+                <t t-call="library_management.KpiCard">
+                    <t t-set="label">Total Books</t>
+                    <t t-set="value" t-value="state.books.total"/>
+                </t>
+                <t t-call="library_management.KpiCard">
+                    <t t-set="label">Available</t>
+                    <t t-set="value" t-value="state.books.available"/>
+                </t>
+                <t t-call="library_management.KpiCard">
+                    <t t-set="label">Borrowed</t>
+                    <t t-set="value" t-value="state.books.borrowed"/>
+                </t>
+                <t t-call="library_management.KpiCard">
+                    <t t-set="label">Lost</t>
+                    <t t-set="value" t-value="state.books.lost"/>
+                </t>
+                <t t-call="library_management.KpiCard">
+                    <t t-set="label">Damaged</t>
+                    <t t-set="value" t-value="state.books.damaged"/>
+                </t>
+            </div>
+        </section>
+    </t>
+
+    <t t-name="library_management.MemberSummary" owl="1">
+        <section class="o_library_summary_block" aria-label="Member summary">
+            <h2>Members</h2>
+            <div class="o_library_dashboard_kpi">
+                <t t-call="library_management.KpiCard">
+                    <t t-set="label">Total Members</t>
+                    <t t-set="value" t-value="state.members.total"/>
+                </t>
+                <t t-call="library_management.KpiCard">
+                    <t t-set="label">Active</t>
+                    <t t-set="value" t-value="state.members.active"/>
+                </t>
+                <t t-call="library_management.KpiCard">
+                    <t t-set="label">Archived</t>
+                    <t t-set="value" t-value="state.members.archived"/>
+                </t>
+                <t t-call="library_management.KpiCard">
+                    <t t-set="label">Borrowing Now</t>
+                    <t t-set="value" t-value="state.members.currently_borrowing"/>
+                </t>
+            </div>
+        </section>
+    </t>
+
+    <t t-name="library_management.BorrowSummary" owl="1">
+        <section class="o_library_summary_block" aria-label="Borrow summary">
+            <h2>Borrows</h2>
+            <div class="o_library_dashboard_kpi">
+                <t t-call="library_management.KpiCard">
+                    <t t-set="label">Total Borrows</t>
+                    <t t-set="value" t-value="state.borrows.total"/>
+                </t>
+                <t t-call="library_management.KpiCard">
+                    <t t-set="label">Draft</t>
+                    <t t-set="value" t-value="state.borrows.draft"/>
+                </t>
+                <t t-call="library_management.KpiCard">
+                    <t t-set="label">Approved</t>
+                    <t t-set="value" t-value="state.borrows.approved"/>
+                </t>
+                <t t-call="library_management.KpiCard">
+                    <t t-set="label">Borrowed</t>
+                    <t t-set="value" t-value="state.borrows.borrowed"/>
+                </t>
+                <t t-call="library_management.KpiCard">
+                    <t t-set="label">Returned</t>
+                    <t t-set="value" t-value="state.borrows.returned"/>
+                </t>
+                <t t-call="library_management.KpiCard">
+                    <t t-set="label">This Week</t>
+                    <t t-set="value" t-value="state.borrows.this_week"/>
+                </t>
+                <t t-call="library_management.KpiCard">
+                    <t t-set="label">This Month</t>
+                    <t t-set="value" t-value="state.borrows.this_month"/>
+                </t>
+            </div>
+        </section>
+    </t>
+
+    <t t-name="library_management.KpiCard" owl="1">
+        <article class="o_library_kpi_card">
+            <span t-esc="label"/>
+            <strong t-esc="state.loading ? '-' : (value || 0)"/>
+        </article>
+    </t>
+
+    <t t-name="library_management.BarChart" owl="1">
+        <div class="o_library_bar_chart">
+            <t t-foreach="items" t-as="item" t-key="item.label">
+                <div class="o_library_bar_item">
+                    <span class="o_library_bar_label" t-esc="item.label"/>
+                    <div class="o_library_bar_track">
+                        <span class="o_library_bar_fill" t-att-style="'width: ' + item.percent + '%'"/>
+                    </div>
+                    <strong t-esc="item.count"/>
+                </div>
+            </t>
+        </div>
+    </t>
+
+    <t t-name="library_management.BookListView" t-inherit="web.ListView" t-inherit-mode="primary" owl="1">
+        <xpath expr="//Layout" position="before">
+            <BookSummary/>
+        </xpath>
+    </t>
+
+    <t t-name="library_management.BookKanbanView" t-inherit="web.KanbanView" t-inherit-mode="primary" owl="1">
+        <xpath expr="//Layout" position="before">
+            <BookSummary/>
+        </xpath>
+    </t>
+
+    <t t-name="library_management.MemberListView" t-inherit="web.ListView" t-inherit-mode="primary" owl="1">
+        <xpath expr="//Layout" position="before">
+            <MemberSummary/>
+        </xpath>
+    </t>
+
+    <t t-name="library_management.BorrowListView" t-inherit="web.ListView" t-inherit-mode="primary" owl="1">
+        <xpath expr="//Layout" position="before">
+            <BorrowSummary/>
+        </xpath>
+    </t>
+
+    <t t-name="library_management.BorrowKanbanView" t-inherit="web.KanbanView" t-inherit-mode="primary" owl="1">
+        <xpath expr="//Layout" position="before">
+            <BorrowSummary/>
+        </xpath>
+    </t>
+</templates>

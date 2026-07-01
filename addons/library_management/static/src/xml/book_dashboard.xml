@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="library_management.BookDashboard" owl="1">
+        <section class="o_library_dashboard_page o_book_dashboard" aria-label="Book dashboard">
+            <h1>Book Dashboard</h1>
+            <div class="o_library_dashboard_kpi">
+                <article class="o_library_kpi_card">
+                    <span>Total Books</span>
+                    <strong t-esc="state.loading ? '-' : state.total_books"/>
+                </article>
+                <article class="o_library_kpi_card">
+                    <span>Available</span>
+                    <strong t-esc="state.loading ? '-' : state.available_books"/>
+                </article>
+                <article class="o_library_kpi_card">
+                    <span>Borrowed</span>
+                    <strong t-esc="state.loading ? '-' : state.borrowed_books"/>
+                </article>
+                <article class="o_library_kpi_card">
+                    <span>Lost</span>
+                    <strong t-esc="state.loading ? '-' : state.lost_books"/>
+                </article>
+                <article class="o_library_kpi_card">
+                    <span>Damaged</span>
+                    <strong t-esc="state.loading ? '-' : state.damaged_books"/>
+                </article>
+            </div>
+            <div class="o_library_category_stats">
+                <h2>Category Statistics</h2>
+                <t t-if="state.loading">
+                    <div class="text-muted">Loading...</div>
+                </t>
+                <t t-elif="state.category_data.length">
+                    <div class="o_library_category_grid">
+                        <t t-foreach="state.category_data" t-as="category" t-key="category.name">
+                            <article class="o_library_category_row">
+                                <span t-esc="category.name"/>
+                                <strong t-esc="category.count"/>
+                            </article>
+                        </t>
+                    </div>
+                </t>
+                <t t-else="">
+                    <div class="text-muted">No book categories yet.</div>
+                </t>
+            </div>
+        </section>
+    </t>
+
+    <t t-name="library_management.BookListView" t-inherit="web.ListView" t-inherit-mode="primary" owl="1">
+        <xpath expr="//Layout" position="before">
+            <BookDashboard/>
+        </xpath>
+    </t>
+
+    <t t-name="library_management.BookKanbanView" t-inherit="web.KanbanView" t-inherit-mode="primary" owl="1">
+        <xpath expr="//Layout" position="before">
+            <BookDashboard/>
+        </xpath>
+    </t>
+</templates>
