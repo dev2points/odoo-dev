@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="product_template_form_library" model="ir.ui.view">
+        <field name="name">product.template.library.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//field[@name='detailed_type']" position="after">
+                <field name="is_library_book" invisible="1"/>
+            </xpath>
+
+            <xpath expr="//header" position="inside">
+                <button string="Library Action" type="object" name="action_book_special" 
+                        attrs="{'invisible': [('is_library_book', '=', False)]}"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="product_template_tree_library"
+            model="ir.ui.view">
+
+        <field name="name">product.template.library.tree</field>
+
+        <field name="model">product.template</field>
+
+        <field name="inherit_id"
+               ref="product.product_template_tree_view"/>
+
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='name']"
+                   position="after">
+
+                <field name="author_id"/>
+
+                <field name="category_id"/>
+
+                <field name="isbn"/>
+
+                <field name="copy_count"/>
+
+                <field name="available_copy_count"/>
+
+            </xpath>
+
+        </field>
+
+    </record>
+
+    <record id="product_template_search_library"
+            model="ir.ui.view">
+
+        <field name="name">product.template.library.search</field>
+
+        <field name="model">product.template</field>
+
+        <field name="inherit_id"
+               ref="product.product_template_search_view"/>
+
+        <field name="arch" type="xml">
+
+            <xpath expr="//search"
+                   position="inside">
+
+                <filter
+                    name="library_book"
+                    string="Library Books"
+                    domain="[('is_library_book','=',True)]"/>
+
+                <field name="isbn"/>
+
+                <field name="author_id"/>
+
+                <field name="category_id"/>
+
+                <field name="publisher_id"/>
+
+            </xpath>
+
+        </field>
+
+    </record>
+
+    <record id="action_library_books"
+            model="ir.actions.act_window">
+
+        <field name="name">Books</field>
+
+        <field name="res_model">product.template</field>
+
+        <field name="view_mode">kanban,tree,form</field>
+
+        <field name="domain">
+            [('is_library_book','=',True)]
+        </field>
+
+        <field name="context">
+            {
+                'default_is_library_book': True,
+                'default_type': 'product'
+            }
+        </field>
+
+    </record>
+
+
+</odoo>

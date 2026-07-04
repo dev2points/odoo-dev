@@ -1,10 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="seq_library_borrow" model="ir.sequence">
-        <field name="name">Library Borrow</field>
-        <field name="code">library.borrow</field>
-        <field name="prefix">BRW/%(year)s/</field>
+
+    <!-- ========================================================= -->
+    <!-- Library Member -->
+    <!-- ========================================================= -->
+
+    <record id="seq_library_member" model="ir.sequence">
+        <field name="name">Library Member</field>
+        <field name="code">library.member</field>
+        <field name="prefix">MB%(year)s</field>
         <field name="padding">5</field>
         <field name="company_id" eval="False"/>
     </record>
+
+    <!-- ========================================================= -->
+    <!-- Library Borrow -->
+    <!-- ========================================================= -->
+
+    <record id="seq_library_borrow" model="ir.sequence">
+        <field name="name">Library Borrow</field>
+        <field name="code">library.borrow</field>
+        <field name="prefix">BR%(year)s</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <!-- ========================================================= -->
+    <!-- Library Shelf -->
+    <!-- ========================================================= -->
+
+    <record id="seq_library_shelf" model="ir.sequence">
+        <field name="name">Library Shelf</field>
+        <field name="code">library.shelf</field>
+        <field name="prefix">SH%(year)s</field>
+        <field name="padding">3</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <!-- ========================================================= -->
+    <!-- Library Author -->
+    <!-- ========================================================= -->
+
+    <record id="seq_library_author" model="ir.sequence">
+        <field name="name">Library Author</field>
+        <field name="code">library.author</field>
+        <field name="prefix">AU%(year)s</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <!-- ========================================================= -->
+    <!-- Library Publisher -->
+    <!-- ========================================================= -->
+
+    <record id="seq_library_publisher" model="ir.sequence">
+        <field name="name">Library Publisher</field>
+        <field name="code">library.publisher</field>
+        <field name="prefix">PB%(year)s</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <!-- ========================================================= -->
+    <!-- Library Category -->
+    <!-- ========================================================= -->
+
+    <record id="seq_library_category" model="ir.sequence">
+        <field name="name">Library Category</field>
+        <field name="code">library.category</field>
+        <field name="prefix">CT%(year)s</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="seq_library_book_copy"
+        model="ir.sequence">
+
+        <field name="name">
+            Library Book Copy
+        </field>
+
+        <field name="code">
+            library.book.copy
+        </field>
+
+        <field name="prefix">
+            BC%(year)s
+        </field>
+
+        <field name="padding">
+            6
+        </field>
+
+    </record>
+
 </odoo>

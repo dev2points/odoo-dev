@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="stock_location_library" model="stock.location">
+
+        <field name="name">Library</field>
+
+        <field name="usage">internal</field>
+
+        <field name="location_id"
+               ref="stock.stock_location_locations"/>
+
+        <field name="is_library">True</field>
+
+    </record>
+
+    <record id="stock_location_member" model="stock.location">
+
+        <field name="name">Borrowed Books</field>
+
+        <field name="usage">customer</field>
+
+        <field name="is_library">True</field>
+
+    </record>
+
+</odoo>

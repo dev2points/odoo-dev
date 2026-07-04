@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem
+        id="menu_library_root"
+        name="Library"
+        sequence="20"/>
+
+    <menuitem
+        id="menu_library_dashboard"
+        name="Dashboard"
+        parent="menu_library_root"
+        action="action_library_dashboard"
+        sequence="5"/>
+
+    <menuitem
+        id="menu_library_books"
+        name="Books"
+        parent="menu_library_root"
+        action="action_library_books"
+        sequence="10"/>
+
+    <menuitem
+        id="menu_library_book_copies"
+        name="Book Copies"
+        parent="menu_library_root"
+        action="action_library_book_copy"
+        sequence="20"/>
+
+    <menuitem
+        id="menu_library_catalog"
+        name="Catalog"
+        parent="menu_library_root"
+        sequence="30"/>
+
+    <menuitem
+        id="menu_library_author"
+        name="Authors"
+        parent="menu_library_catalog"
+        action="action_library_author"
+        sequence="10"/>
+
+    <menuitem
+        id="menu_library_category"
+        name="Categories"
+        parent="menu_library_catalog"
+        action="action_library_category"
+        sequence="20"/>
+
+    <menuitem
+        id="menu_library_publisher"
+        name="Publishers"
+        parent="menu_library_catalog"
+        action="action_library_publisher"
+        sequence="30"/>
+
+    <menuitem
+        id="menu_library_operation"
+        name="Operations"
+        parent="menu_library_root"
+        sequence="40"/>
+
+    <menuitem
+        id="menu_library_borrow"
+        name="Borrows"
+        parent="menu_library_operation"
+        action="action_library_borrow"
+        sequence="10"/>
+
+    <menuitem
+        id="menu_library_member"
+        name="Members"
+        parent="menu_library_operation"
+        action="action_library_member"
+        sequence="20"/>
+
+    <menuitem
+        id="menu_library_shelf"
+        name="Shelves"
+        parent="menu_library_operation"
+        action="action_library_shelf"
+        sequence="30"/>
+
+</odoo>

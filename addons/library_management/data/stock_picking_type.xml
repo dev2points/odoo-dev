@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="library_picking_type_out" model="stock.picking.type">
+        <field name="name">Library Borrow</field>
+        <field name="code">outgoing</field>
+        <field name="sequence_code">LBR</field> 
+        <field name="warehouse_id" ref="stock.warehouse0"/>
+        <field name="default_location_src_id" ref="library_management.stock_location_library"/>
+        <field name="default_location_dest_id" ref="library_management.stock_location_member"/>
+    </record>
+
+</odoo>

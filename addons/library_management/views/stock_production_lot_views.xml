@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_library_book_copy_tree" model="ir.ui.view">
+        <field name="name">library.book.copy.tree</field>
+        <field name="model">stock.lot</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="shelf_id"/>
+                <field name="condition"/>
+                <field name="borrow_count"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_library_book_copy_search" model="ir.ui.view">
+        <field name="name">library.book.copy.search</field>
+        <field name="model">stock.lot</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="shelf_id"/>
+                <field name="condition"/>
+
+                <separator/>
+
+                <group expand="0" string="Group By">
+                    <filter string="Book" name="group_by_product" context="{'group_by':'product_id'}"/>
+                    <filter string="Shelf" name="group_by_shelf" context="{'group_by':'shelf_id'}"/>
+                    <filter string="Condition" name="group_by_condition" context="{'group_by':'condition'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_library_book_copy_form" model="ir.ui.view">
+        <field name="name">library.book.copy.form</field>
+        <field name="model">stock.lot</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <field name="company_id" invisible="1"/>
+
+                    <group>
+                        <field name="name"/>
+                        <field name="product_id"/>
+                        <field name="shelf_id"/>
+                        <field name="condition"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_library_book_copy_kanban" model="ir.ui.view">
+        <field name="name">library.book.copy.kanban</field>
+        <field name="model">stock.lot</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="condition">
+
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="shelf_id"/>
+                <field name="condition"/>
+
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <strong>
+                                <field name="name"/>
+                            </strong>
+                            <div class="mt8">
+                                <field name="product_id"/>
+                            </div>
+                            <div>
+                                Shelf : <field name="shelf_id"/>
+                            </div>
+                            <div class="mt8">
+                                <field name="condition"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_library_book_copy" model="ir.actions.act_window">
+        <field name="name">Book Copies</field>
+        <field name="res_model">stock.lot</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="search_view_id" ref="view_library_book_copy_search"/>
+    </record>
+
+</odoo>

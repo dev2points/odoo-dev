@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==========================================================
+                            TREE
+    ========================================================== -->
+
+    <record id="view_library_book_copy_tree" model="ir.ui.view">
+        <field name="name">library.book.copy.tree</field>
+        <field name="model">library.book.copy</field>
+        <field name="arch" type="xml">
+            <tree
+                decoration-success="state == 'available'"
+                decoration-warning="state == 'borrowed'"
+                decoration-danger="state in ('lost','damaged')">
+
+                <field name="code"/>
+                <field name="product_tmpl_id"/>
+                <field name="barcode"/>
+                <field name="shelf_id"/>
+                <field name="condition"/>
+                <field name="state" widget="badge"/>
+
+            </tree>
+        </field>
+    </record>
+
+    <!-- ==========================================================
+                            FORM
+    ========================================================== -->
+
+    <record id="view_library_book_copy_form" model="ir.ui.view">
+        <field name="name">library.book.copy.form</field>
+        <field name="model">library.book.copy</field>
+        <field name="arch" type="xml">
+            <form>
+
+                <header>
+
+                    <button
+                        name="action_mark_available"
+                        type="object"
+                        string="Available"
+                        class="btn-success"
+                        attrs="{'invisible':[('state','=','available')]}"/>
+
+                    <button
+                        name="action_mark_damaged"
+                        type="object"
+                        string="Damaged"
+                        class="btn-warning"
+                        attrs="{'invisible':[('state','=','damaged')]}"/>
+
+                    <button
+                        name="action_mark_lost"
+                        type="object"
+                        string="Lost"
+                        class="btn-danger"
+                        attrs="{'invisible':[('state','=','lost')]}"/>
+
+                    <field
+                        name="state"
+                        widget="statusbar"
+                        statusbar_visible="available,borrowed,reserved,maintenance,lost"/>
+
+                </header>
+
+                <sheet>
+
+                    <div class="oe_button_box" name="button_box">
+
+                        <button
+                            class="oe_stat_button"
+                            type="object"
+                            icon="fa-history"
+                            name="action_view_borrow_history">
+
+                            <field
+                                name="borrow_count"
+                                widget="statinfo"
+                                string="Borrow"/>
+
+                        </button>
+
+                    </div>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="code"/>
+                        </h1>
+                    </div>
+
+                    <group>
+
+                        <group>
+
+                            <field name="product_tmpl_id"/>
+
+                            <field name="barcode"/>
+
+                            <field name="condition"/>
+
+                        </group>
+
+                        <group>
+
+                            <field name="shelf_id"/>
+
+                            <field name="current_borrow_id" readonly="1"/>
+
+                            <field name="active"/>
+
+                        </group>
+
+                    </group>
+
+                    <notebook>
+
+                        <page string="Borrow History">
+
+                            <field
+                                name="borrow_line_ids"
+                                readonly="1">
+
+                                <tree>
+
+                                    <field name="borrow_id"/>
+
+                                    <field name="product_tmpl_id"/>
+
+                                    <field name="create_date"/>
+
+                                </tree>
+
+                            </field>
+
+                        </page>
+
+                        <page string="Internal Note">
+
+                            <field name="note"/>
+
+                        </page>
+
+                    </notebook>
+
+                </sheet>
+
+            </form>
+
+        </field>
+    </record>
+
+    <!-- ==========================================================
+                            SEARCH
+    ========================================================== -->
+
+    <record id="view_library_book_copy_search" model="ir.ui.view">
+        <field name="name">library.book.copy.search</field>
+        <field name="model">library.book.copy</field>
+        <field name="arch" type="xml">
+
+            <search>
+
+                <field name="code"/>
+
+                <field name="product_tmpl_id"/>
+
+                <field name="barcode"/>
+
+                <field name="shelf_id"/>
+
+                <separator/>
+
+                <filter
+                    string="Available"
+                    name="available"
+                    domain="[('state','=','available')]"/>
+
+                <filter
+                    string="Borrowed"
+                    name="borrowed"
+                    domain="[('state','=','borrowed')]"/>
+
+                <filter
+                    string="Lost"
+                    name="lost"
+                    domain="[('state','=','lost')]"/>
+
+                <filter
+                    string="Damaged"
+                    name="damaged"
+                    domain="[('state','=','damaged')]"/>
+
+                <group expand="0" string="Group By">
+
+                    <filter
+                        string="Book"
+                        context="{'group_by':'product_tmpl_id'}"/>
+
+                    <filter
+                        string="Shelf"
+                        context="{'group_by':'shelf_id'}"/>
+
+                    <filter
+                        string="State"
+                        context="{'group_by':'state'}"/>
+
+                    <filter
+                        string="Condition"
+                        context="{'group_by':'condition'}"/>
+
+                </group>
+
+            </search>
+
+        </field>
+    </record>
+
+    <!-- ==========================================================
+                            KANBAN
+    ========================================================== -->
+
+    <record id="view_library_book_copy_kanban" model="ir.ui.view">
+        <field name="name">library.book.copy.kanban</field>
+        <field name="model">library.book.copy</field>
+        <field name="arch" type="xml">
+
+            <kanban default_group_by="state">
+
+                <field name="code"/>
+                <field name="product_tmpl_id"/>
+                <field name="condition"/>
+                <field name="shelf_id"/>
+                <field name="state"/>
+
+                <templates>
+
+                    <t t-name="kanban-box">
+
+                        <div class="oe_kanban_global_click">
+
+                            <strong>
+                                <field name="code"/>
+                            </strong>
+
+                            <div class="mt8">
+                                <field name="product_tmpl_id"/>
+                            </div>
+
+                            <div>
+                                Shelf :
+                                <field name="shelf_id"/>
+                            </div>
+
+                            <div>
+                                Condition :
+                                <field name="condition"/>
+                            </div>
+
+                            <div class="mt8">
+                                <field
+                                    name="state"
+                                    widget="badge"/>
+                            </div>
+
+                        </div>
+
+                    </t>
+
+                </templates>
+
+            </kanban>
+
+        </field>
+    </record>
+
+    <!-- ==========================================================
+                            ACTION
+    ========================================================== -->
+
+    <record id="action_library_book_copy"
+            model="ir.actions.act_window">
+
+        <field name="name">Book Copies</field>
+
+        <field name="res_model">library.book.copy</field>
+
+        <field name="view_mode">kanban,tree,form</field>
+
+        <field name="search_view_id"
+               ref="view_library_book_copy_search"/>
+
+    </record>
+
+</odoo>

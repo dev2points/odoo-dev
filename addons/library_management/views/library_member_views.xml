@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- TREE -->
+
+    <record id="view_library_member_tree"
+            model="ir.ui.view">
+
+        <field name="name">library.member.tree</field>
+
+        <field name="model">library.member</field>
+
+        <field name="arch" type="xml">
+
+            <tree>
+
+                <field name="code"/>
+
+                <field name="name"/>
+
+                <field name="phone"/>
+
+                <field name="email"/>
+
+                <field name="borrowing_count"/>
+
+                <field name="overdue_count"/>
+
+            </tree>
+
+        </field>
+
+    </record>
+
+    <!-- FORM -->
+
+    <record id="view_library_member_form"
+            model="ir.ui.view">
+
+        <field name="name">library.member.form</field>
+
+        <field name="model">library.member</field>
+
+        <field name="arch" type="xml">
+
+            <form>
+
+                <sheet>
+
+                    <div class="oe_button_box"
+                         name="button_box">
+
+                        <button
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-book"
+                            name="action_view_borrows">
+
+                            <field
+                                name="borrow_count"
+                                widget="statinfo"
+                                string="Borrows"/>
+
+                        </button>
+
+                    </div>
+
+                    <div class="oe_title">
+
+                        <h1>
+
+                            <field name="name"/>
+
+                        </h1>
+
+                    </div>
+
+                    <group>
+
+                        <group>
+
+                            <field name="code"/>
+
+                            <field name="image_1920"
+                                   widget="image"/>
+
+                            <field name="gender"/>
+
+                            <field name="birthday"/>
+
+                        </group>
+
+                        <group>
+
+                            <field name="phone"/>
+
+                            <field name="mobile"/>
+
+                            <field name="email"/>
+
+                            <field name="register_date"/>
+
+                        </group>
+
+                    </group>
+
+                    <group>
+
+                        <field name="address"/>
+
+                    </group>
+
+                    <notebook>
+
+                        <page string="Borrow History">
+
+                            <field
+                                name="borrow_ids"
+                                readonly="1">
+
+                                <tree>
+
+                                    <field name="name"/>
+
+                                    <field name="borrow_date"/>
+
+                                    <field name="return_date"/>
+
+                                    <field name="state"/>
+
+                                </tree>
+
+                            </field>
+
+                        </page>
+
+                    </notebook>
+
+                </sheet>
+
+            </form>
+
+        </field>
+
+    </record>
+
+    <!-- SEARCH -->
+
+    <record id="view_library_member_search" model="ir.ui.view">
+        <field name="name">library.member.search</field>
+        <field name="model">library.member</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="email"/>
+
+                <filter string="Borrowing" name="filter_borrowing" domain="[('borrowing_count','&gt;',0)]"/>
+                <filter string="Overdue" name="filter_overdue" domain="[('overdue_count','&gt;',0)]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- ACTION -->
+
+    <record id="action_library_member"
+            model="ir.actions.act_window">
+
+        <field name="name">Members</field>
+
+        <field name="res_model">library.member</field>
+
+        <field name="view_mode">tree,form</field>
+
+    </record>
+
+</odoo>
