@@ -1,6 +1,6 @@
 from odoo import api, fields, models
 
-
+# Class quản lý dòng yêu cầu mượn sách trong thư viện
 class LibraryBorrowLine(models.Model):
     _name = "library.borrow.line"
     _description = "Library Borrow Line"

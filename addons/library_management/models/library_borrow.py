@@ -3,7 +3,7 @@ from dateutil.relativedelta import relativedelta
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
-
+# Class quản lý yêu cầu mượn sách trong thư viện
 class LibraryBorrow(models.Model):
     _name = "library.borrow"
     _description = "Library Borrow"

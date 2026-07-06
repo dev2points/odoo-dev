@@ -1,6 +1,6 @@
 from odoo import fields, models
 
-
+# Class quản lý kệ sách trong thư viện
 class LibraryShelf(models.Model):
     _name = "library.shelf"
     _description = "Library Shelf"

@@ -1,6 +1,6 @@
 from odoo import api, fields, models
 
-
+# Class quản lý bản sao sách trong thư viện
 class StockProductionLot(models.Model):
     _inherit = "stock.lot"
 
