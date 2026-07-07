@@ -6,7 +6,7 @@
         <field name="model">library.author</field>
         <field name="arch" type="xml">
 
-            <tree>
+            <tree js_class="library_catalog_list">
 
                 <field name="name"/>
 

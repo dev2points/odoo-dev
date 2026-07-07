@@ -31,7 +31,8 @@
         <field name="name">library.borrow.tree</field>
         <field name="model">library.borrow</field>
         <field name="arch" type="xml">
-            <tree decoration-success="state == 'returned'"
+            <tree js_class="library_borrow_list"
+                  decoration-success="state == 'returned'"
                   decoration-warning="state == 'borrowed'"
                   decoration-info="state == 'confirmed'"
                   decoration-muted="state == 'cancel'">

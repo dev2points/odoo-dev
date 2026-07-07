@@ -5,7 +5,7 @@
         <field name="name">library.publisher.tree</field>
         <field name="model">library.publisher</field>
         <field name="arch" type="xml">
-            <tree>
+            <tree js_class="library_catalog_list">
                 <field name="name"/>
                 <field name="phone"/>
                 <field name="email"/>

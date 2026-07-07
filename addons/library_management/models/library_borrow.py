@@ -481,12 +481,15 @@ class LibraryBorrow(models.Model):
 
         monthly_revenue = sum(_borrow_revenue(record) for record in monthly_borrows) + sum(monthly_fines.mapped("amount"))
         weekly_revenue = sum(_borrow_revenue(record) for record in weekly_borrows) + sum(weekly_fines.mapped("amount"))
+        total_revenue = sum(_borrow_revenue(record) for record in borrow_records) + sum(paid_fines.mapped("amount"))
 
         return {
             "overview": {
                 "total_books": len(book_templates),
                 "total_copies": len(book_lots),
                 "total_members": len(member_records),
+                "total_loans": len(borrow_records),
+                "total_revenue": total_revenue,
                 "monthly_loans": len(monthly_borrows),
                 "monthly_revenue": monthly_revenue,
                 "weekly_revenue": weekly_revenue,
@@ -637,10 +640,17 @@ class LibraryBorrow(models.Model):
                 if not move:
                     continue
 
-                for move_line in move.move_line_ids:
-
-                    move_line.lot_id = line.lot_id
-                    move_line.qty_done = line.quantity
+                move.move_line_ids.unlink()
+                self.env['stock.move.line'].create({
+                    'move_id': move.id,
+                    'picking_id': picking.id,
+                    'product_id': line.product_id.id,
+                    'product_uom_id': line.product_id.uom_id.id,
+                    'location_id': picking.location_id.id,
+                    'location_dest_id': picking.location_dest_id.id,
+                    'lot_id': line.lot_id.id,
+                    'qty_done': line.quantity,
+                })
 
             picking.button_validate()
 
@@ -671,10 +681,20 @@ class LibraryBorrow(models.Model):
                     lambda m: m.product_id == line.product_id
                 )
 
-                for move_line in move.move_line_ids:
+                if not move:
+                    continue
 
-                    move_line.lot_id = line.lot_id
-                    move_line.qty_done = line.quantity
+                move.move_line_ids.unlink()
+                self.env['stock.move.line'].create({
+                    'move_id': move.id,
+                    'picking_id': picking.id,
+                    'product_id': line.product_id.id,
+                    'product_uom_id': line.product_id.uom_id.id,
+                    'location_id': picking.location_id.id,
+                    'location_dest_id': picking.location_dest_id.id,
+                    'lot_id': line.lot_id.id,
+                    'qty_done': line.quantity,
+                })
 
             picking.button_validate()
 

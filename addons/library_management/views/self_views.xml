@@ -5,7 +5,7 @@
         <field name="name">library.shelf.tree</field>
         <field name="model">library.shelf</field>
         <field name="arch" type="xml">
-            <tree>
+            <tree js_class="library_shelf_list">
                 <field name="code"/>
                 <field name="name"/>
                 <field name="floor"/>

@@ -12,7 +12,7 @@
 
         <field name="arch" type="xml">
 
-            <tree>
+            <tree js_class="library_member_list">
 
                 <field name="code"/>
 

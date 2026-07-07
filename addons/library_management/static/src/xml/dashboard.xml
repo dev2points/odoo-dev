@@ -5,7 +5,7 @@
             <div class="o_library_dashboard_header">
                 <div>
                     <h1>Library Dashboard</h1>
-                    <p>Library activity overview</p>
+                    <p>Library activity overview &amp; analytics</p>
                 </div>
             </div>
 
@@ -18,18 +18,33 @@
                 <BorrowSummary/>
             </section>
 
-            <section class="o_library_dashboard_charts" aria-label="Borrow statistics">
-                <article class="o_library_chart_panel">
-                    <h2>Borrow Count by Week</h2>
-                    <t t-call="library_management.BarChart">
-                        <t t-set="items" t-value="state.borrows.weekly_data || []"/>
-                    </t>
+            <section class="o_library_dashboard_charts" aria-label="Library analytics">
+                <article class="o_library_chart_panel line-chart-panel">
+                    <div class="o_library_chart_header">
+                        <i class="fa fa-line-chart chart-icon text-teal"/>
+                        <h2>Borrow Trend by Day (Weekly)</h2>
+                    </div>
+                    <div class="o_library_canvas_container">
+                        <canvas t-ref="weeklyChart"/>
+                    </div>
                 </article>
-                <article class="o_library_chart_panel">
-                    <h2>Borrow Count by Month</h2>
-                    <t t-call="library_management.BarChart">
-                        <t t-set="items" t-value="state.borrows.monthly_data || []"/>
-                    </t>
+                <article class="o_library_chart_panel bar-chart-panel">
+                    <div class="o_library_chart_header">
+                        <i class="fa fa-bar-chart chart-icon text-indigo"/>
+                        <h2>Borrow Volume by Month</h2>
+                    </div>
+                    <div class="o_library_canvas_container">
+                        <canvas t-ref="monthlyChart"/>
+                    </div>
+                </article>
+                <article class="o_library_chart_panel doughnut-chart-panel">
+                    <div class="o_library_chart_header">
+                        <i class="fa fa-pie-chart chart-icon text-emerald"/>
+                        <h2>Book State Distribution</h2>
+                    </div>
+                    <div class="o_library_canvas_container">
+                        <canvas t-ref="doughnutChart"/>
+                    </div>
                 </article>
             </section>
         </div>
@@ -38,35 +53,53 @@
     <t t-name="library_management.DashboardOverview" owl="1">
         <section class="o_library_overview_block" aria-label="Library overview">
             <div class="o_library_overview_title">
-                <h2>Overview</h2>
-                <span>This month</span>
+                <h2>General Statistics</h2>
+                <span>All-time &amp; Activity</span>
             </div>
             <div class="o_library_dashboard_kpi">
                 <t t-call="library_management.KpiCard">
-                    <t t-set="label">Books</t>
+                    <t t-set="label">Total Books</t>
                     <t t-set="value" t-value="state.overview.total_books"/>
+                    <t t-set="icon">fa-book</t>
+                    <t t-set="colorClass">kpi-indigo</t>
                 </t>
                 <t t-call="library_management.KpiCard">
-                    <t t-set="label">Copies</t>
+                    <t t-set="label">Total Copies</t>
                     <t t-set="value" t-value="state.overview.total_copies"/>
+                    <t t-set="icon">fa-clone</t>
+                    <t t-set="colorClass">kpi-teal</t>
                 </t>
                 <t t-call="library_management.KpiCard">
-                    <t t-set="label">Members</t>
+                    <t t-set="label">Total Members</t>
                     <t t-set="value" t-value="state.overview.total_members"/>
+                    <t t-set="icon">fa-users</t>
+                    <t t-set="colorClass">kpi-emerald</t>
                 </t>
                 <t t-call="library_management.KpiCard">
-                    <t t-set="label">Loans</t>
-                    <t t-set="value" t-value="state.overview.monthly_loans"/>
+                    <t t-set="label">Total Loans</t>
+                    <t t-set="value" t-value="state.overview.total_loans"/>
+                    <t t-set="icon">fa-exchange</t>
+                    <t t-set="colorClass">kpi-violet</t>
                 </t>
                 <t t-call="library_management.KpiCard">
-                    <t t-set="label">Weekly Revenue</t>
-                    <t t-set="value" t-value="state.overview.weekly_revenue"/>
+                    <t t-set="label">Total Revenue</t>
+                    <t t-set="value" t-value="state.overview.total_revenue"/>
+                    <t t-set="icon">fa-usd</t>
                     <t t-set="prefix">$</t>
+                    <t t-set="colorClass">kpi-amber</t>
+                </t>
+                <t t-call="library_management.KpiCard">
+                    <t t-set="label">Monthly Loans</t>
+                    <t t-set="value" t-value="state.overview.monthly_loans"/>
+                    <t t-set="icon">fa-calendar</t>
+                    <t t-set="colorClass">kpi-blue</t>
                 </t>
                 <t t-call="library_management.KpiCard">
                     <t t-set="label">Monthly Revenue</t>
                     <t t-set="value" t-value="state.overview.monthly_revenue"/>
+                    <t t-set="icon">fa-money</t>
                     <t t-set="prefix">$</t>
+                    <t t-set="colorClass">kpi-rose</t>
                 </t>
             </div>
         </section>
@@ -74,31 +107,43 @@
 
     <t t-name="library_management.BookSummary" owl="1">
         <section class="o_library_summary_block" aria-label="Book summary">
-            <h2>Books</h2>
+            <h2>Books Summary</h2>
             <div class="o_library_dashboard_kpi">
                 <t t-call="library_management.KpiCard">
                     <t t-set="label">Titles</t>
                     <t t-set="value" t-value="state.books.total"/>
+                    <t t-set="icon">fa-book</t>
+                    <t t-set="colorClass">kpi-indigo</t>
                 </t>
                 <t t-call="library_management.KpiCard">
                     <t t-set="label">Copies</t>
                     <t t-set="value" t-value="state.books.copies"/>
+                    <t t-set="icon">fa-clone</t>
+                    <t t-set="colorClass">kpi-teal</t>
                 </t>
                 <t t-call="library_management.KpiCard">
                     <t t-set="label">Available</t>
                     <t t-set="value" t-value="state.books.available"/>
+                    <t t-set="icon">fa-check-circle</t>
+                    <t t-set="colorClass">kpi-emerald</t>
                 </t>
                 <t t-call="library_management.KpiCard">
                     <t t-set="label">Borrowed</t>
                     <t t-set="value" t-value="state.books.borrowed"/>
+                    <t t-set="icon">fa-arrow-circle-right</t>
+                    <t t-set="colorClass">kpi-blue</t>
                 </t>
                 <t t-call="library_management.KpiCard">
                     <t t-set="label">Lost</t>
                     <t t-set="value" t-value="state.books.lost"/>
+                    <t t-set="icon">fa-exclamation-triangle</t>
+                    <t t-set="colorClass">kpi-rose</t>
                 </t>
                 <t t-call="library_management.KpiCard">
                     <t t-set="label">Damaged</t>
                     <t t-set="value" t-value="state.books.damaged"/>
+                    <t t-set="icon">fa-wrench</t>
+                    <t t-set="colorClass">kpi-amber</t>
                 </t>
             </div>
         </section>
@@ -106,23 +151,31 @@
 
     <t t-name="library_management.MemberSummary" owl="1">
         <section class="o_library_summary_block" aria-label="Member summary">
-            <h2>Members</h2>
+            <h2>Members Summary</h2>
             <div class="o_library_dashboard_kpi">
                 <t t-call="library_management.KpiCard">
                     <t t-set="label">Total Members</t>
                     <t t-set="value" t-value="state.members.total"/>
+                    <t t-set="icon">fa-users</t>
+                    <t t-set="colorClass">kpi-indigo</t>
                 </t>
                 <t t-call="library_management.KpiCard">
                     <t t-set="label">Active</t>
                     <t t-set="value" t-value="state.members.active"/>
+                    <t t-set="icon">fa-user-plus</t>
+                    <t t-set="colorClass">kpi-emerald</t>
                 </t>
                 <t t-call="library_management.KpiCard">
                     <t t-set="label">Archived</t>
                     <t t-set="value" t-value="state.members.archived"/>
+                    <t t-set="icon">fa-user-times</t>
+                    <t t-set="colorClass">kpi-rose</t>
                 </t>
                 <t t-call="library_management.KpiCard">
                     <t t-set="label">Borrowing Now</t>
                     <t t-set="value" t-value="state.members.currently_borrowing"/>
+                    <t t-set="icon">fa-retweet</t>
+                    <t t-set="colorClass">kpi-blue</t>
                 </t>
             </div>
         </section>
@@ -130,27 +183,37 @@
 
     <t t-name="library_management.CopySummary" owl="1">
         <section class="o_library_summary_block" aria-label="Copy summary">
-            <h2>Copies</h2>
+            <h2>Book Copies Summary</h2>
             <div class="o_library_dashboard_kpi">
                 <t t-call="library_management.KpiCard">
                     <t t-set="label">Total Copies</t>
                     <t t-set="value" t-value="state.copies.total"/>
+                    <t t-set="icon">fa-files-o</t>
+                    <t t-set="colorClass">kpi-indigo</t>
                 </t>
                 <t t-call="library_management.KpiCard">
                     <t t-set="label">Available</t>
                     <t t-set="value" t-value="state.copies.available"/>
+                    <t t-set="icon">fa-check</t>
+                    <t t-set="colorClass">kpi-emerald</t>
                 </t>
                 <t t-call="library_management.KpiCard">
                     <t t-set="label">Borrowed</t>
                     <t t-set="value" t-value="state.copies.borrowed"/>
+                    <t t-set="icon">fa-sign-out</t>
+                    <t t-set="colorClass">kpi-blue</t>
                 </t>
                 <t t-call="library_management.KpiCard">
                     <t t-set="label">Lost</t>
                     <t t-set="value" t-value="state.copies.lost"/>
+                    <t t-set="icon">fa-trash</t>
+                    <t t-set="colorClass">kpi-rose</t>
                 </t>
                 <t t-call="library_management.KpiCard">
                     <t t-set="label">Damaged</t>
                     <t t-set="value" t-value="state.copies.damaged"/>
+                    <t t-set="icon">fa-exclamation-triangle</t>
+                    <t t-set="colorClass">kpi-amber</t>
                 </t>
             </div>
         </section>
@@ -158,35 +221,43 @@
 
     <t t-name="library_management.BorrowSummary" owl="1">
         <section class="o_library_summary_block" aria-label="Borrow summary">
-            <h2>Loans</h2>
+            <h2>Loans Summary</h2>
             <div class="o_library_dashboard_kpi">
                 <t t-call="library_management.KpiCard">
                     <t t-set="label">Total Loans</t>
                     <t t-set="value" t-value="state.borrows.total"/>
+                    <t t-set="icon">fa-exchange</t>
+                    <t t-set="colorClass">kpi-indigo</t>
                 </t>
                 <t t-call="library_management.KpiCard">
                     <t t-set="label">Draft</t>
                     <t t-set="value" t-value="state.borrows.draft"/>
+                    <t t-set="icon">fa-file-o</t>
+                    <t t-set="colorClass">kpi-violet</t>
                 </t>
                 <t t-call="library_management.KpiCard">
                     <t t-set="label">Approved</t>
                     <t t-set="value" t-value="state.borrows.approved"/>
+                    <t t-set="icon">fa-thumbs-up</t>
+                    <t t-set="colorClass">kpi-teal</t>
                 </t>
                 <t t-call="library_management.KpiCard">
                     <t t-set="label">Borrowed</t>
                     <t t-set="value" t-value="state.borrows.borrowed"/>
+                    <t t-set="icon">fa-sign-out</t>
+                    <t t-set="colorClass">kpi-blue</t>
                 </t>
                 <t t-call="library_management.KpiCard">
                     <t t-set="label">Returned</t>
                     <t t-set="value" t-value="state.borrows.returned"/>
+                    <t t-set="icon">fa-check-circle-o</t>
+                    <t t-set="colorClass">kpi-emerald</t>
                 </t>
                 <t t-call="library_management.KpiCard">
                     <t t-set="label">This Week</t>
                     <t t-set="value" t-value="state.borrows.this_week"/>
-                </t>
-                <t t-call="library_management.KpiCard">
-                    <t t-set="label">This Month</t>
-                    <t t-set="value" t-value="state.borrows.this_month"/>
+                    <t t-set="icon">fa-calendar-o</t>
+                    <t t-set="colorClass">kpi-amber</t>
                 </t>
             </div>
         </section>
@@ -194,23 +265,31 @@
 
     <t t-name="library_management.CatalogSummary" owl="1">
         <section class="o_library_summary_block" aria-label="Catalog summary">
-            <h2>Catalog</h2>
+            <h2>Catalog Summary</h2>
             <div class="o_library_dashboard_kpi">
                 <t t-call="library_management.KpiCard">
                     <t t-set="label">Authors</t>
                     <t t-set="value" t-value="state.catalog.authors"/>
+                    <t t-set="icon">fa-pencil</t>
+                    <t t-set="colorClass">kpi-indigo</t>
                 </t>
                 <t t-call="library_management.KpiCard">
                     <t t-set="label">Publishers</t>
                     <t t-set="value" t-value="state.catalog.publishers"/>
+                    <t t-set="icon">fa-building-o</t>
+                    <t t-set="colorClass">kpi-teal</t>
                 </t>
                 <t t-call="library_management.KpiCard">
                     <t t-set="label">Categories</t>
                     <t t-set="value" t-value="state.catalog.categories"/>
+                    <t t-set="icon">fa-folder-open</t>
+                    <t t-set="colorClass">kpi-emerald</t>
                 </t>
                 <t t-call="library_management.KpiCard">
                     <t t-set="label">Shelves</t>
                     <t t-set="value" t-value="state.catalog.shelves"/>
+                    <t t-set="icon">fa-database</t>
+                    <t t-set="colorClass">kpi-blue</t>
                 </t>
             </div>
         </section>
@@ -218,50 +297,50 @@
 
     <t t-name="library_management.ShelfSummary" owl="1">
         <section class="o_library_summary_block" aria-label="Shelf summary">
-            <h2>Shelves</h2>
+            <h2>Shelves Summary</h2>
             <div class="o_library_dashboard_kpi">
                 <t t-call="library_management.KpiCard">
-                    <t t-set="label">Shelves</t>
+                    <t t-set="label">Total Shelves</t>
                     <t t-set="value" t-value="state.catalog.shelves"/>
+                    <t t-set="icon">fa-database</t>
+                    <t t-set="colorClass">kpi-indigo</t>
                 </t>
                 <t t-call="library_management.KpiCard">
                     <t t-set="label">Active Shelves</t>
                     <t t-set="value" t-value="state.catalog.active_shelves"/>
+                    <t t-set="icon">fa-toggle-on</t>
+                    <t t-set="colorClass">kpi-emerald</t>
                 </t>
                 <t t-call="library_management.KpiCard">
-                    <t t-set="label">Copies</t>
+                    <t t-set="label">Book Copies</t>
                     <t t-set="value" t-value="state.copies.total"/>
+                    <t t-set="icon">fa-clone</t>
+                    <t t-set="colorClass">kpi-blue</t>
                 </t>
                 <t t-call="library_management.KpiCard">
-                    <t t-set="label">Available</t>
+                    <t t-set="label">Available Copies</t>
                     <t t-set="value" t-value="state.copies.available"/>
+                    <t t-set="icon">fa-check-square-o</t>
+                    <t t-set="colorClass">kpi-teal</t>
                 </t>
             </div>
         </section>
     </t>
 
     <t t-name="library_management.KpiCard" owl="1">
-        <article class="o_library_kpi_card">
-            <span t-esc="label"/>
-            <strong>
-                <t t-esc="typeof prefix !== 'undefined' ? prefix : ''"/>
-                <t t-esc="state.loading ? '-' : (value || 0)"/>
-            </strong>
+        <article t-attf-class="o_library_kpi_card #{colorClass || ''}">
+            <div class="o_library_kpi_icon_wrapper" t-if="icon">
+                <i t-attf-class="fa #{icon}"/>
+            </div>
+            <div class="o_library_kpi_content">
+                <span t-esc="label"/>
+                <strong>
+                    <t t-esc="typeof prefix !== 'undefined' ? prefix : ''"/>
+                    <t t-esc="state.loading ? '-' : (value || 0)"/>
+                    <t t-esc="typeof suffix !== 'undefined' ? suffix : ''"/>
+                </strong>
+            </div>
         </article>
-    </t>
-
-    <t t-name="library_management.BarChart" owl="1">
-        <div class="o_library_bar_chart">
-            <t t-foreach="items" t-as="item" t-key="item.label">
-                <div class="o_library_bar_item">
-                    <span class="o_library_bar_label" t-esc="item.label"/>
-                    <div class="o_library_bar_track">
-                        <span class="o_library_bar_fill" t-att-style="'width: ' + item.percent + '%'"/>
-                    </div>
-                    <strong t-esc="item.count"/>
-                </div>
-            </t>
-        </div>
     </t>
 
     <t t-name="library_management.BookListView" t-inherit="web.ListView" t-inherit-mode="primary" owl="1">

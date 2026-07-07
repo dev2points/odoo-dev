@@ -5,7 +5,7 @@
         <field name="name">library.book.copy.tree</field>
         <field name="model">stock.lot</field>
         <field name="arch" type="xml">
-            <tree>
+            <tree js_class="library_copy_list">
                 <field name="name"/>
                 <field name="internal_code"/>
                 <field name="product_id"/>
@@ -89,7 +89,7 @@
         <field name="name">library.book.copy.kanban</field>
         <field name="model">stock.lot</field>
         <field name="arch" type="xml">
-            <kanban default_group_by="condition">
+            <kanban default_group_by="condition" js_class="library_copy_kanban">
 
                 <field name="name"/>
                 <field name="product_id"/>
