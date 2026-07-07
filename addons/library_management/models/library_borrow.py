@@ -202,7 +202,7 @@ class LibraryBorrow(models.Model):
                 _("Please add at least one book.")
             )
 
-        product_ids = []
+        lot_ids = []
 
         for line in self.line_ids:
 
@@ -221,12 +221,12 @@ class LibraryBorrow(models.Model):
                     _("Quantity must be greater than zero.")
                 )
 
-            if line.product_id.id in product_ids:
+            if line.lot_id.id in lot_ids:
                 raise ValidationError(
-                    _("Duplicate book is not allowed.")
+                    _("Duplicate book copy is not allowed.")
                 )
 
-            product_ids.append(line.product_id.id)
+            lot_ids.append(line.lot_id.id)
 
             if line.lot_id.product_id != line.product_id:
                 raise ValidationError(
@@ -237,6 +237,12 @@ class LibraryBorrow(models.Model):
                         line.lot_id.name,
                         line.product_id.display_name,
                     )
+                )
+
+            if line.lot_id.state != "available":
+                raise ValidationError(
+                    _("Book Copy '%s' is not available.")
+                    % line.lot_id.name
                 )
 
     # ==========================================================
@@ -392,16 +398,51 @@ class LibraryBorrow(models.Model):
     def get_library_dashboard_data(self):
         today = fields.Date.to_date(fields.Date.context_today(self))
         week_start = today - relativedelta(days=today.weekday())
+        month_start = today.replace(day=1)
+        next_month = month_start + relativedelta(months=1)
 
-        book_lots = self.env["stock.lot"].search([])
+        book_templates = self.env["product.template"].search([("is_library_book", "=", True)])
+        book_lots = self.env["stock.lot"].search([("product_tmpl_id.is_library_book", "=", True)])
         borrow_records = self.search([])
         member_records = self.env["library.member"].search([])
+        author_records = self.env["library.author"].search([])
+        publisher_records = self.env["library.publisher"].search([])
+        category_records = self.env["library.category"].search([])
+        shelf_records = self.env["library.shelf"].search([])
+        paid_fines = self.env["library.fine"].search([("paid", "=", True)])
 
-        borrowed_lots = book_lots.filtered(
-            lambda lot: any(line.borrow_id.state == "borrowed" for line in lot.borrow_line_ids)
+        borrowed_lots = book_lots.filtered(lambda lot: lot.state == "borrowed")
+        lost_lots = book_lots.filtered(lambda lot: lot.state == "lost")
+        damaged_lots = book_lots.filtered(lambda lot: lot.state == "damaged")
+
+        def _borrow_revenue(record):
+            if not record.borrow_date:
+                return 0.0
+            end_date = fields.Date.to_date(record.return_date or record.due_date or today)
+            start_date = fields.Date.to_date(record.borrow_date)
+            rental_days = max((end_date - start_date).days, 1)
+            return sum(
+                line.product_id.product_tmpl_id.rental_price_per_day
+                * line.quantity
+                * rental_days
+                for line in record.line_ids
+            )
+
+        def _fine_date(fine):
+            return fields.Date.to_date(fine.write_date or fine.create_date)
+
+        weekly_borrows = borrow_records.filtered(
+            lambda record: record.borrow_date
+            and fields.Date.to_date(record.borrow_date) >= week_start
         )
-        lost_lots = book_lots.filtered(lambda lot: lot.condition == "lost")
-        damaged_lots = book_lots.filtered(lambda lot: lot.condition == "damaged")
+        monthly_borrows = borrow_records.filtered(
+            lambda record: record.borrow_date
+            and month_start <= fields.Date.to_date(record.borrow_date) < next_month
+        )
+        weekly_fines = paid_fines.filtered(lambda fine: _fine_date(fine) >= week_start)
+        monthly_fines = paid_fines.filtered(
+            lambda fine: month_start <= _fine_date(fine) < next_month
+        )
 
         def _chart_data(series):
             max_count = max((count for _, count in series), default=0)
@@ -428,20 +469,39 @@ class LibraryBorrow(models.Model):
         monthly_series = []
         for offset in range(5, -1, -1):
             month_marker = today - relativedelta(months=offset)
-            month_start = month_marker.replace(day=1)
-            next_month = month_start + relativedelta(months=1)
+            series_month_start = month_marker.replace(day=1)
+            series_next_month = series_month_start + relativedelta(months=1)
             count = len(
                 borrow_records.filtered(
-                    lambda record, start=month_start, end=next_month: record.borrow_date
+                    lambda record, start=series_month_start, end=series_next_month: record.borrow_date
                     and start <= fields.Date.to_date(record.borrow_date) < end
                 )
             )
-            monthly_series.append((month_start.strftime("%b %Y"), count))
+            monthly_series.append((series_month_start.strftime("%b %Y"), count))
+
+        monthly_revenue = sum(_borrow_revenue(record) for record in monthly_borrows) + sum(monthly_fines.mapped("amount"))
+        weekly_revenue = sum(_borrow_revenue(record) for record in weekly_borrows) + sum(weekly_fines.mapped("amount"))
 
         return {
+            "overview": {
+                "total_books": len(book_templates),
+                "total_copies": len(book_lots),
+                "total_members": len(member_records),
+                "monthly_loans": len(monthly_borrows),
+                "monthly_revenue": monthly_revenue,
+                "weekly_revenue": weekly_revenue,
+            },
             "books": {
+                "total": len(book_templates),
+                "copies": len(book_lots),
+                "available": len(book_lots.filtered(lambda lot: lot.state == "available")),
+                "borrowed": len(borrowed_lots),
+                "lost": len(lost_lots),
+                "damaged": len(damaged_lots),
+            },
+            "copies": {
                 "total": len(book_lots),
-                "available": max(len(book_lots) - len(borrowed_lots) - len(lost_lots) - len(damaged_lots), 0),
+                "available": len(book_lots.filtered(lambda lot: lot.state == "available")),
                 "borrowed": len(borrowed_lots),
                 "lost": len(lost_lots),
                 "damaged": len(damaged_lots),
@@ -477,6 +537,13 @@ class LibraryBorrow(models.Model):
                 ),
                 "weekly_data": _chart_data(weekly_series),
                 "monthly_data": _chart_data(monthly_series),
+            },
+            "catalog": {
+                "authors": len(author_records),
+                "publishers": len(publisher_records),
+                "categories": len(category_records),
+                "shelves": len(shelf_records),
+                "active_shelves": len(shelf_records.filtered("active")),
             },
         }
 

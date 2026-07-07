@@ -1,13 +1,56 @@
 .o_library_dashboard_page {
     padding: 24px;
-    background: #f7f9fb;
+    background: #f5f7fa;
     min-height: 100%;
 }
 
+.o_library_dashboard_header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
 .o_library_dashboard_header h1 {
-    margin: 0 0 16px;
+    margin: 0;
     font-size: 24px;
     font-weight: 600;
+}
+
+.o_library_dashboard_header p {
+    margin: 4px 0 0;
+    color: #5c6670;
+    font-size: 13px;
+}
+
+.o_library_overview_block {
+    margin-bottom: 16px;
+    padding: 18px;
+    border: 1px solid #cfd8e3;
+    border-radius: 6px;
+    background: #ffffff;
+    box-shadow: 0 2px 6px rgba(20, 32, 45, 0.06);
+}
+
+.o_library_overview_title {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.o_library_overview_title h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.o_library_overview_title span {
+    color: #667085;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
 }
 
 .o_library_summary_block {
@@ -16,11 +59,51 @@
     background: #f7f9fb;
 }
 
+.o_library_view_summary .o_library_summary_block {
+    padding: 8px 16px;
+    border-bottom: 1px solid #d8dee6;
+    background: #ffffff;
+}
+
+.o_library_view_summary .o_library_summary_block h2 {
+    margin-bottom: 8px;
+    font-size: 13px;
+}
+
+.o_library_view_summary .o_library_dashboard_kpi {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.o_library_view_summary .o_library_kpi_card {
+    display: flex;
+    min-height: 38px;
+    min-width: 118px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 10px;
+    border-left-width: 3px;
+    box-shadow: none;
+}
+
+.o_library_view_summary .o_library_kpi_card span {
+    font-size: 11px;
+    line-height: 1.1;
+    white-space: nowrap;
+}
+
+.o_library_view_summary .o_library_kpi_card strong {
+    margin-top: 0;
+    font-size: 18px;
+}
+
 .o_library_dashboard_page .o_library_summary_block {
-    margin-bottom: 16px;
     border: 1px solid #d8dee6;
     border-radius: 6px;
     background: #ffffff;
+    box-shadow: 0 1px 2px rgba(20, 32, 45, 0.04);
 }
 
 .o_library_summary_block h2 {
@@ -38,6 +121,13 @@
 
 .o_library_dashboard_page .o_library_dashboard_kpi {
     margin: 0;
+}
+
+.o_library_dashboard_sections {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
 }
 
 .o_library_kpi_card {

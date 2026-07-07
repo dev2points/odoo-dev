@@ -3,6 +3,7 @@ from odoo import models, fields, api
 class LibraryFine(models.Model):
 
     _name = "library.fine"
+    _description = "Library Fine"
 
     borrow_id = fields.Many2one(
         "library.borrow"

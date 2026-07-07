@@ -4,8 +4,16 @@ access_library_category_user,library.category.user,model_library_category,librar
 access_library_member_user,library.member.user,model_library_member,library_management.group_library_user,1,1,1,0
 access_library_borrow_user,library.borrow.user,model_library_borrow,library_management.group_library_user,1,1,1,0
 access_library_borrow_line_user,library.borrow.line.user,model_library_borrow_line,library_management.group_library_user,1,1,1,0
+access_library_publisher_user,library.publisher.user,model_library_publisher,library_management.group_library_user,1,1,1,0
+access_library_shelf_user,library.shelf.user,model_library_shelf,library_management.group_library_user,1,1,1,0
+access_library_fine_user,library.fine.user,model_library_fine,library_management.group_library_user,1,1,1,0
+access_stock_lot_library_user,stock.lot.library.user,stock.model_stock_lot,library_management.group_library_user,1,1,1,0
 access_library_author_manager,library.author.manager,model_library_author,library_management.group_library_manager,1,1,1,1
 access_library_category_manager,library.category.manager,model_library_category,library_management.group_library_manager,1,1,1,1
 access_library_member_manager,library.member.manager,model_library_member,library_management.group_library_manager,1,1,1,1
 access_library_borrow_manager,library.borrow.manager,model_library_borrow,library_management.group_library_manager,1,1,1,1
 access_library_borrow_line_manager,library.borrow.line.manager,model_library_borrow_line,library_management.group_library_manager,1,1,1,1
+access_library_publisher_manager,library.publisher.manager,model_library_publisher,library_management.group_library_manager,1,1,1,1
+access_library_shelf_manager,library.shelf.manager,model_library_shelf,library_management.group_library_manager,1,1,1,1
+access_library_fine_manager,library.fine.manager,model_library_fine,library_management.group_library_manager,1,1,1,1
+access_stock_lot_library_manager,stock.lot.library.manager,stock.model_stock_lot,library_management.group_library_manager,1,1,1,1

@@ -1,110 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <record id="product_template_form_library" model="ir.ui.view">
-        <field name="name">product.template.library.form</field>
+    <record id="view_library_book_tree" model="ir.ui.view">
+        <field name="name">library.book.tree</field>
         <field name="model">product.template</field>
-        <field name="inherit_id" ref="product.product_template_only_form_view"/>
         <field name="arch" type="xml">
-            
-            <xpath expr="//field[@name='detailed_type']" position="after">
-                <field name="is_library_book" invisible="1"/>
-            </xpath>
-
-            <xpath expr="//header" position="inside">
-                <button string="Library Action" type="object" name="action_book_special" 
-                        attrs="{'invisible': [('is_library_book', '=', False)]}"/>
-            </xpath>
-
-        </field>
-    </record>
-
-    <record id="product_template_tree_library"
-            model="ir.ui.view">
-
-        <field name="name">product.template.library.tree</field>
-
-        <field name="model">product.template</field>
-
-        <field name="inherit_id"
-               ref="product.product_template_tree_view"/>
-
-        <field name="arch" type="xml">
-
-            <xpath expr="//field[@name='name']"
-                   position="after">
-
-                <field name="author_id"/>
-
-                <field name="category_id"/>
-
+            <tree js_class="library_book_list" decoration-muted="not active">
+                <field name="name"/>
                 <field name="isbn"/>
-
-                <field name="copy_count"/>
-
-                <field name="available_copy_count"/>
-
-            </xpath>
-
-        </field>
-
-    </record>
-
-    <record id="product_template_search_library"
-            model="ir.ui.view">
-
-        <field name="name">product.template.library.search</field>
-
-        <field name="model">product.template</field>
-
-        <field name="inherit_id"
-               ref="product.product_template_search_view"/>
-
-        <field name="arch" type="xml">
-
-            <xpath expr="//search"
-                   position="inside">
-
-                <filter
-                    name="library_book"
-                    string="Library Books"
-                    domain="[('is_library_book','=',True)]"/>
-
-                <field name="isbn"/>
-
                 <field name="author_id"/>
-
-                <field name="category_id"/>
-
                 <field name="publisher_id"/>
-
-            </xpath>
-
+                <field name="category_id"/>
+                <field name="copy_count"/>
+                <field name="available_copy_count"/>
+                <field name="borrowed_copy_count"/>
+                <field name="borrow_count"/>
+                <field name="active" invisible="1"/>
+            </tree>
         </field>
-
     </record>
 
-    <record id="action_library_books"
-            model="ir.actions.act_window">
+    <record id="view_library_book_kanban" model="ir.ui.view">
+        <field name="name">library.book.kanban</field>
+        <field name="model">product.template</field>
+        <field name="arch" type="xml">
+            <kanban js_class="library_book_kanban">
+                <field name="name"/>
+                <field name="isbn"/>
+                <field name="author_id"/>
+                <field name="category_id"/>
+                <field name="cover_image"/>
+                <field name="copy_count"/>
+                <field name="available_copy_count"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="o_kanban_image">
+                                <field name="cover_image" widget="image"/>
+                            </div>
+                            <div class="oe_kanban_details">
+                                <strong><field name="name"/></strong>
+                                <div><field name="author_id"/></div>
+                                <div><field name="category_id"/></div>
+                                <div class="mt8">
+                                    <span>Available: <field name="available_copy_count"/></span>
+                                    <span class="ms-2">Total: <field name="copy_count"/></span>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
 
+    <record id="view_library_book_form" model="ir.ui.view">
+        <field name="name">library.book.form</field>
+        <field name="model">product.template</field>
+        <field name="arch" type="xml">
+            <form string="Book">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_copies" type="object" class="oe_stat_button" icon="fa-copy">
+                            <field name="copy_count" widget="statinfo" string="Copies"/>
+                        </button>
+                        <button name="action_view_copies" type="object" class="oe_stat_button" icon="fa-check">
+                            <field name="available_copy_count" widget="statinfo" string="Available"/>
+                        </button>
+                        <button name="action_view_copies" type="object" class="oe_stat_button" icon="fa-book">
+                            <field name="borrow_count" widget="statinfo" string="Borrows"/>
+                        </button>
+                    </div>
+
+                    <field name="cover_image" widget="image" class="oe_avatar"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Book Title"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Catalog">
+                            <field name="is_library_book" invisible="1"/>
+                            <field name="isbn"/>
+                            <field name="author_id"/>
+                            <field name="publisher_id"/>
+                            <field name="category_id"/>
+                        </group>
+                        <group string="Publication">
+                            <field name="language"/>
+                            <field name="edition"/>
+                            <field name="publish_year"/>
+                            <field name="rental_price_per_day"/>
+                        </group>
+                    </group>
+
+                    <group string="Statistics">
+                        <field name="copy_count"/>
+                        <field name="available_copy_count"/>
+                        <field name="borrowed_copy_count"/>
+                        <field name="damaged_copy_count"/>
+                        <field name="lost_copy_count"/>
+                        <field name="borrow_count"/>
+                    </group>
+
+                    <notebook>
+                        <page string="Description">
+                            <field name="description_library"/>
+                        </page>
+                        <page string="Book Copies">
+                            <field name="copy_ids" readonly="1">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="internal_code"/>
+                                    <field name="shelf_id"/>
+                                    <field name="condition"/>
+                                    <field name="state" widget="badge"/>
+                                    <field name="current_borrow_id"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_library_book_search" model="ir.ui.view">
+        <field name="name">library.book.search</field>
+        <field name="model">product.template</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="isbn"/>
+                <field name="author_id"/>
+                <field name="publisher_id"/>
+                <field name="category_id"/>
+                <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Author" name="group_author" context="{'group_by': 'author_id'}"/>
+                    <filter string="Publisher" name="group_publisher" context="{'group_by': 'publisher_id'}"/>
+                    <filter string="Category" name="group_category" context="{'group_by': 'category_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_library_books" model="ir.actions.act_window">
         <field name="name">Books</field>
-
         <field name="res_model">product.template</field>
-
         <field name="view_mode">kanban,tree,form</field>
-
-        <field name="domain">
-            [('is_library_book','=',True)]
-        </field>
-
-        <field name="context">
-            {
-                'default_is_library_book': True,
-                'default_type': 'product'
-            }
-        </field>
-
+        <field name="domain">[('is_library_book', '=', True)]</field>
+        <field name="context">{'default_is_library_book': True, 'default_detailed_type': 'product'}</field>
+        <field name="search_view_id" ref="view_library_book_search"/>
     </record>
-
 
 </odoo>
